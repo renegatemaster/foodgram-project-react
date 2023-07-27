@@ -7,6 +7,7 @@ User = get_user_model()
 
 
 class Ingredient(models.Model):
+    '''Ingredient model.'''
     name = models.CharField(
         _('название ингредиента'),
         max_length=200,
@@ -24,15 +25,10 @@ class Ingredient(models.Model):
 
 
 class Tag(models.Model):
+    '''Tag model.'''
     name = models.CharField(_('имя тега'), max_length=200, unique=True)
-    color = models.CharField(_('HEX-цвет тега'), max_length=7)
-    slug = models.SlugField(
-        _('слаг тега'),
-        max_length=200,
-        unique=True,
-        null=True,
-        blank=True
-    )
+    color = models.CharField(_('HEX-цвет тега'), max_length=7, unique=True)
+    slug = models.SlugField(_('слаг тега'), max_length=200, unique=True)
 
     class Meta:
         verbose_name = _('тег')
@@ -43,11 +39,7 @@ class Tag(models.Model):
 
 
 class Recipe(models.Model):
-    tags = models.ManyToManyField(
-        Tag,
-        related_name='recipes',
-        verbose_name=_('теги')
-    )
+    '''Recipe model.'''
     author = models.ForeignKey(
         User,
         related_name='recipes',
@@ -55,25 +47,33 @@ class Recipe(models.Model):
         on_delete=models.SET_NULL,
         null=True
     )
-    ingredients = models.ManyToManyField(
-        Ingredient,
-        related_name='recipes',
-        through='IngredientInRecipe',
-        verbose_name=_('ингредиенты')
-    )
     name = models.CharField(
         _('название рецепта'),
         max_length=200,
-        db_index=True)
+        db_index=True,
+        help_text=_('Обязательное. 200 символов или менее.')
+    )
     image = models.ImageField(
         _('картинка блюда'),
         upload_to='recipes/images/',
         null=True,
         default=None
     )
-    text = models.TextField(_('описание'))
+    text = models.TextField(_('описание'), help_text=_('Обязательное.'))
+    ingredients = models.ManyToManyField(
+        Ingredient,
+        related_name='recipes',
+        through='IngredientInRecipe',
+        verbose_name=_('ингредиенты')
+    )
+    tags = models.ManyToManyField(
+        Tag,
+        related_name='recipes',
+        verbose_name=_('теги')
+    )
     cooking_time = models.PositiveSmallIntegerField(
         _('время приготовления'),
+        help_text=_('Обязательное. 1 минута или более.'),
         validators=[
             MinValueValidator(
                 limit_value=1,
@@ -92,6 +92,7 @@ class Recipe(models.Model):
 
 
 class IngredientInRecipe(models.Model):
+    '''Model for ingredients in recipe.'''
     ingredient = models.ForeignKey(
         Ingredient,
         verbose_name=_('ингредиенты'),
@@ -122,6 +123,7 @@ class IngredientInRecipe(models.Model):
 
 
 class Favorite(models.Model):
+    '''Model for adding to favorite.'''
     user = models.ForeignKey(
         User,
         related_name='favorites',
@@ -144,6 +146,7 @@ class Favorite(models.Model):
 
 
 class ShoppingCart(models.Model):
+    '''Model for adding to cart.'''
     user = models.ForeignKey(
         User,
         related_name='cart',
