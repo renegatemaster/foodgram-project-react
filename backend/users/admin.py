@@ -10,18 +10,16 @@ User = get_user_model()
 class UserAdmin(admin.ModelAdmin):
     list_display = (
         'id',
-        'last_name',
         'first_name',
+        'last_name',
         'username',
         'email',
-        'password'
     )
-    list_editable = ('email', 'password')
     list_filter = (
-        'last_name',
-        'first_name',
-        'username',
         'email',
+        'first_name',
+        'last_name',
+        'username',
     )
     search_fields = (
         'id',

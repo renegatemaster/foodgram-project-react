@@ -3,15 +3,14 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# Будет скрыто на этапе деплоя
 SECRET_KEY = 'django-insecure-e49=z$ckr9d^q2$6z5l_wg5wiywdy-^*)gsd8uwf7javh==97z'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# Будет скрыто на этапе деплоя
 DEBUG = True
 
+# Будет скрыто на этапе деплоя
 ALLOWED_HOSTS = ['158.160.31.12', 'localhost', '127.0.0.1']
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -23,6 +22,9 @@ INSTALLED_APPS = [
 
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
+    'django_filters',
 
     'api',
     'core',
@@ -122,9 +124,13 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files
+# Static files and media
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 
@@ -139,4 +145,19 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 6,
+}
+
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+    'USER_CREATE_PASSWORD_RETYPE': False,
+    'SET_PASSWORD_RETYPE': False,
+    'PERMISSIONS': {
+        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
+        'user_list': ['rest_framework.permissions.IsAuthenticatedOrReadOnly']
+    },
+    'SERIALIZERS': {
+        'user': 'api.serializers.CustomUserSerializer',
+        'current_user': 'api.serializers.CustomUserSerializer',
+        'user_create': 'api.serializers.CustomUserCreateSerializer',
+    }
 }
