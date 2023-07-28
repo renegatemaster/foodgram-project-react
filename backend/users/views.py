@@ -10,6 +10,7 @@ from api.pagination import CustomPageNumberPagination
 from api.serializers import CustomUserSerializer, SubscribeSerializer
 
 from .models import Subscribe
+from .permissions import UserPermission
 
 User = get_user_model()
 
@@ -18,6 +19,7 @@ class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     pagination_class = CustomPageNumberPagination
+    permission_classes = (UserPermission, )
 
     @action(
         methods=['post', 'delete'],
