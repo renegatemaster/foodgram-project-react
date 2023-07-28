@@ -169,9 +169,9 @@ class CUDRecipeSerializer(serializers.ModelSerializer):
         recipe.tags.set(tags)
         IngredientInRecipe.objects.bulk_create(
             [IngredientInRecipe(
-                ingredient=get_object_or_404(Ingredient, id=ingredient['id']),
+                ingredient_id=item['id'],
                 recipe=recipe,
-                amount=ingredient['amount']
-            ) for ingredient in ingredients]
+                amount=item['amount'],
+            ) for item in ingredients]
         )
         return recipe
