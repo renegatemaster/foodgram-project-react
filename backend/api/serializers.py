@@ -109,7 +109,6 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
         source='ingredient.name', read_only=True)
     measurement_unit = serializers.StringRelatedField(
         source='ingredient.measurement_unit', read_only=True)
-    amount = serializers.IntegerField(source='quantity')
 
     class Meta:
         model = IngredientInRecipe
@@ -118,7 +117,6 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
 
 class IngredientInRecipeCUDSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(write_only=True)
-    amount = serializers.IntegerField(source='quantity')
 
     class Meta:
         model = IngredientInRecipe
@@ -173,7 +171,7 @@ class CUDRecipeSerializer(serializers.ModelSerializer):
             [IngredientInRecipe(
                 ingredient=get_object_or_404(Ingredient, id=ingredient['id']),
                 recipe=recipe,
-                quantity=ingredient['amount']
+                amount=ingredient['amount']
             ) for ingredient in ingredients]
         )
         return recipe

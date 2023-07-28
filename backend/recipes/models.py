@@ -104,7 +104,7 @@ class IngredientInRecipe(models.Model):
         verbose_name=_('рецепт'),
         on_delete=models.CASCADE
     )
-    quantity = models.PositiveSmallIntegerField(
+    amount = models.PositiveSmallIntegerField(
         _('количество'),
         validators=[
             MinValueValidator(
@@ -119,7 +119,7 @@ class IngredientInRecipe(models.Model):
         verbose_name_plural = _('ингредиенты в рецепте')
 
     def __str__(self):
-        return f'{self.recipe}: "{self.ingredient}" — {self.quantity}'
+        return f'{self.recipe}: "{self.ingredient}" — {self.amount}'
 
 
 class Favorite(models.Model):
