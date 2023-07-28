@@ -63,3 +63,6 @@ class CustomUserViewSet(UserViewSet):
             context={'request': request}
         )
         return self.get_paginated_response(serializer.data)
+
+    def get_queryset(self):
+        return User.objects.all()

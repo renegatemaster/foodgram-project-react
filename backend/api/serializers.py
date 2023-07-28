@@ -2,6 +2,7 @@ import base64
 
 from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
+from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 
@@ -116,6 +117,7 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
 
 
 class IngredientInRecipeCUDSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(write_only=True)
     amount = serializers.IntegerField(source='quantity')
 
     class Meta:
@@ -147,7 +149,7 @@ class ReadRecipeSerializer(serializers.ModelSerializer):
         user = self.context.get('request').user
         if not user.is_authenticated:
             return False
-        return Recipe.objects.filter(favorites__user=user, id=obj.id).exists()
+        return Recipe.objects.filter(cart__user=user, id=obj.id).exists()
 
 
 class CUDRecipeSerializer(serializers.ModelSerializer):
@@ -155,8 +157,23 @@ class CUDRecipeSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(), many=True)
     image = Base64ImageField()
+    author = CustomUserSerializer(read_only=True)
 
     class Meta:
         model = Recipe
         fields = ('ingredients', 'tags', 'image',
-                  'name', 'text', 'cooking_time', )
+                  'name', 'text', 'cooking_time', 'author')
+
+    def create(self, validated_data):
+        ingredients = validated_data.pop('ingredients')
+        tags = validated_data.pop('tags')
+        recipe = Recipe.objects.create(**validated_data)
+        recipe.tags.set(tags)
+        IngredientInRecipe.objects.bulk_create(
+            [IngredientInRecipe(
+                ingredient=get_object_or_404(Ingredient, id=ingredient['id']),
+                recipe=recipe,
+                quantity=ingredient['amount']
+            ) for ingredient in ingredients]
+        )
+        return recipe

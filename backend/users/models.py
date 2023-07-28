@@ -38,7 +38,7 @@ class User(AbstractUser):
         ordering = ['id']
 
     def __str__(self):
-        return f'{self.first_name} aka {self.username}.'
+        return f'{self.first_name} aka {self.username}'
 
 
 class Subscribe(models.Model):
@@ -67,4 +67,4 @@ class Subscribe(models.Model):
         ]
 
     def __str__(self):
-        return f'Подписка {self.user} на {self.author}.'
+        return f'Подписка {self.user} на {self.author}'
