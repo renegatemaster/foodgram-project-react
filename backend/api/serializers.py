@@ -112,15 +112,16 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = IngredientInRecipe
-        fields = ('id', 'name', 'measurement_unit', 'amount', )
+        fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
 class IngredientInRecipeCUDSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(write_only=True)
+    id = serializers.IntegerField()  # write_only=True
+    amount = serializers.IntegerField()
 
     class Meta:
         model = IngredientInRecipe
-        fields = ('id', 'amount', )
+        fields = ('id', 'amount')
 
 
 class ReadRecipeSerializer(serializers.ModelSerializer):
@@ -167,11 +168,23 @@ class CUDRecipeSerializer(serializers.ModelSerializer):
         tags = validated_data.pop('tags')
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
-        IngredientInRecipe.objects.bulk_create(
-            [IngredientInRecipe(
-                ingredient_id=item['id'],
+        for ingredient in ingredients:
+            IngredientInRecipe.objects.create(
                 recipe=recipe,
-                amount=item['amount'],
-            ) for item in ingredients]
-        )
+                ingredient_id=ingredient.get('id'),
+                amount=ingredient.get('amount'),
+            )
+        # for i in ingredients:
+        #     ingredient = get_object_or_404(Ingredient, pk=i['id'])
+        #     IngredientInRecipe.objects.create(
+        #         ingredient=ingredient, recipe=recipe, amount=i['amount']
+        #     )
+
+        # IngredientInRecipe.objects.bulk_create(
+        #     [IngredientInRecipe(
+        #         ingredient_id=item['id'],
+        #         recipe=recipe,
+        #         amount=item['amount'],
+        #     ) for item in ingredients]
+        # )
         return recipe
