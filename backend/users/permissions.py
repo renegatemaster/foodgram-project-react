@@ -1,6 +1,5 @@
 from rest_framework.permissions import BasePermission
 
-
 GUEST_METHODS = ('GET', 'POST', 'OPTIONS', 'HEAD')
 
 
