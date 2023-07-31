@@ -5,9 +5,8 @@ from django.core.files.base import ContentFile
 from django.db.models import F
 from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer, UserSerializer
-from rest_framework import serializers
-
 from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
+from rest_framework import serializers
 from users.models import Subscribe
 
 User = get_user_model()
