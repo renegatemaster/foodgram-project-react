@@ -1,0 +1,11 @@
+venv
+.git
+.gitignore
+.env
+db.sqlite3
+Dockerfile
+README.md
+LICENSE VERSION
+.vscode
+*.pyc
+**/__pycache__/
