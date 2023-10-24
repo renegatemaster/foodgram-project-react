@@ -140,7 +140,10 @@ class ReadRecipeSerializer(serializers.ModelSerializer):
     def get_ingredients(self, obj):
         recipe = obj
         ingredients = recipe.ingredients.values(
-            "id", "name", "measurement_unit", amount=F("ingredientinrecipe__amount")
+            "id",
+            "name",
+            "measurement_unit",
+            amount=F("ingredientinrecipe__amount")
         )
         return ingredients
 
@@ -159,7 +162,9 @@ class ReadRecipeSerializer(serializers.ModelSerializer):
 
 class CUDRecipeSerializer(serializers.ModelSerializer):
     ingredients = IngredientInRecipeCUDSerializer(many=True)
-    tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
+    tags = serializers.PrimaryKeyRelatedField(
+        queryset=Tag.objects.all(), many=True
+    )
     image = Base64ImageField()
     author = CustomUserSerializer(read_only=True)
 

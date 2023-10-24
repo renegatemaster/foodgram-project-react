@@ -12,7 +12,10 @@ from recipes.models import (
 )
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import (
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+)
 from rest_framework.response import Response
 
 from .filters import RecipeFilter
@@ -77,12 +80,16 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 for ingredient in ingredients
             ]
         )
-        response = HttpResponse(shopping_cart, content_type="text.txt; charset=utf-8")
+        response = HttpResponse(
+            shopping_cart, content_type="text.txt; charset=utf-8"
+        )
         response["Content-Disposition"] = f"attachment; filename={file_name}"
         return response
 
     @action(
-        methods=["post", "delete"], detail=True, permission_classes=[IsAuthenticated]
+        methods=["post", "delete"],
+        detail=True,
+        permission_classes=[IsAuthenticated]
     )
     def shopping_cart(self, request, pk=None):
         if request.method == "POST":
@@ -91,7 +98,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return self.delete_recipe(ShoppingCart, request.user, pk)
 
     @action(
-        methods=["post", "delete"], detail=True, permission_classes=[IsAuthenticated]
+        methods=["post", "delete"],
+        detail=True,
+        permission_classes=[IsAuthenticated]
     )
     def favorite(self, request, pk=None):
         if request.method == "POST":
@@ -104,7 +113,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         instance = model.objects.filter(user=user, recipe=recipe)
         if instance.exists():
             return Response(
-                {"errors": "Рецепт уже добавлен."}, status=status.HTTP_400_BAD_REQUEST
+                {"errors": "Рецепт уже добавлен."},
+                status=status.HTTP_400_BAD_REQUEST
             )
         model.objects.create(user=user, recipe=recipe)
         serializer = ShortRecipeSerializer(recipe)
@@ -115,7 +125,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         instance = model.objects.filter(user=user, recipe=recipe)
         if not instance.exists():
             return Response(
-                {"errors": "Рецепт уже удален."}, status=status.HTTP_400_BAD_REQUEST
+                {"errors": "Рецепт уже удален."},
+                status=status.HTTP_400_BAD_REQUEST
             )
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
