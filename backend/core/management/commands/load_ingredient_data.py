@@ -2,7 +2,6 @@ from csv import DictReader
 
 from django.core.management import BaseCommand
 from loguru import logger
-
 from recipes.models import Ingredient
 
 db_model = Ingredient

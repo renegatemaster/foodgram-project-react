@@ -3,14 +3,14 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Будет скрыто на этапе деплоя
-SECRET_KEY = "django-insecure-e49=z$ckr9d^q2$6z5l_wg5wiywdy-^*)gsd8uwf7javh==97z"
+SECRET_KEY = str(os.getenv("SECRET_KEY"))
 
-# Будет скрыто на этапе деплоя
-DEBUG = True
+if str(os.getenv("DEBUG")) is None:
+    DEBUG = False
+else:
+    DEBUG = os.getenv("DEBUG")
 
-# Будет скрыто на этапе деплоя
-ALLOWED_HOSTS = ["158.160.31.12", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = str(os.getenv("ALLOWED_HOSTS")).split(" ")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
