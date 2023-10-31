@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class User(AbstractUser):
-    '''Custom user model.'''
+    """Custom user model."""
     email = models.EmailField(
         _('email address'),
         max_length=254,
@@ -42,7 +42,7 @@ class User(AbstractUser):
 
 
 class Subscribe(models.Model):
-    '''Model allows users subscribe to each other.'''
+    """Model allows users subscribe to each other."""
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -59,6 +59,7 @@ class Subscribe(models.Model):
     class Meta:
         verbose_name = _('Подписка')
         verbose_name_plural = _('Подписки')
+        ordering = ('author__id')
         constraints = [
             models.UniqueConstraint(
                 fields=['author', 'user'],

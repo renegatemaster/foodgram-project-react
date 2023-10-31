@@ -2,14 +2,6 @@ from django.contrib.auth import get_user_model
 from django.db.models import Sum
 from django.shortcuts import HttpResponse, get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from recipes.models import (
-    Favorite,
-    Ingredient,
-    IngredientInRecipe,
-    Recipe,
-    ShoppingCart,
-    Tag,
-)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import (
@@ -26,6 +18,14 @@ from .serializers import (
     ReadRecipeSerializer,
     ShortRecipeSerializer,
     TagSerializer,
+)
+from recipes.models import (
+    Favorite,
+    Ingredient,
+    IngredientInRecipe,
+    Recipe,
+    ShoppingCart,
+    Tag,
 )
 
 User = get_user_model()

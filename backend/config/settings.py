@@ -5,10 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = str(os.getenv("SECRET_KEY"))
 
-if str(os.getenv("DEBUG")) is None:
-    DEBUG = False
-else:
-    DEBUG = os.getenv("DEBUG")
+DEBUG = os.getenv("DEBUG", default=False)
 
 ALLOWED_HOSTS = str(os.getenv("ALLOWED_HOSTS")).split(" ")
 

@@ -1,6 +1,10 @@
 from django.contrib.auth import get_user_model
-from django_filters.rest_framework import (FilterSet,
-                                           ModelMultipleChoiceFilter, filters)
+from django_filters.rest_framework import (
+    FilterSet,
+    ModelMultipleChoiceFilter,
+    filters,
+)
+
 from recipes.models import Recipe, Tag
 
 User = get_user_model()

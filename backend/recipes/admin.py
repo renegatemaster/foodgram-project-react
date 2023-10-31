@@ -4,6 +4,11 @@ from .models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
                      ShoppingCart, Tag)
 
 
+class RecipeIngredientInline(admin.StackedInline):
+    model = IngredientInRecipe
+    extra = 0
+
+
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = (
@@ -36,6 +41,7 @@ class RecipeAdmin(admin.ModelAdmin):
         'tags'
     )
     empty_value_display = '-пусто-'
+    inlines = (RecipeIngredientInline, )
 
     @admin.display(description="Added to favorite")
     def added_to_favorite(self, obj):

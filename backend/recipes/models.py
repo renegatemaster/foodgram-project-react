@@ -1,13 +1,15 @@
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from core.constants import MIN_AMOUNT_SIZE, MAX_AMOUNT_SIZE
 
 User = get_user_model()
 
 
 class Ingredient(models.Model):
-    '''Ingredient model.'''
+    """Ingredient model."""
     name = models.CharField(
         _('название ингредиента'),
         max_length=200,
@@ -31,7 +33,7 @@ class Ingredient(models.Model):
 
 
 class Tag(models.Model):
-    '''Tag model.'''
+    """Tag model."""
     name = models.CharField(_('имя тега'), max_length=200, unique=True)
     color = models.CharField(_('HEX-цвет тега'), max_length=7, unique=True)
     slug = models.SlugField(_('слаг тега'), max_length=200, unique=True)
@@ -39,13 +41,14 @@ class Tag(models.Model):
     class Meta:
         verbose_name = _('тег')
         verbose_name_plural = _('теги')
+        ordering = ['name']
 
     def __str__(self):
         return self.name
 
 
 class Recipe(models.Model):
-    '''Recipe model.'''
+    """Recipe model."""
     author = models.ForeignKey(
         User,
         related_name='recipes',
@@ -82,8 +85,14 @@ class Recipe(models.Model):
         help_text=_('Обязательное. 1 минута или более.'),
         validators=[
             MinValueValidator(
-                limit_value=1,
-                message=_('Минимальное время приготовления — 1 минута.')
+                limit_value=MIN_AMOUNT_SIZE,
+                message=_(f'''Минимальное время приготовления —
+                          {MIN_AMOUNT_SIZE} минута.''')
+            ),
+            MaxValueValidator(
+                limit_value=MAX_AMOUNT_SIZE,
+                message=_(f'''Время приготовления не может превышать
+                          {MAX_AMOUNT_SIZE} минут.''')
             )
         ]
     )
@@ -91,14 +100,14 @@ class Recipe(models.Model):
     class Meta:
         verbose_name = _('рецепт')
         verbose_name_plural = _('рецепты')
-        ordering = ['-id']
+        ordering = ['name']
 
     def __str__(self):
         return self.name
 
 
 class IngredientInRecipe(models.Model):
-    '''Model for ingredients in recipe.'''
+    """Model for ingredients in recipe."""
     ingredient = models.ForeignKey(
         Ingredient,
         verbose_name=_('ингредиенты'),
@@ -114,8 +123,12 @@ class IngredientInRecipe(models.Model):
         _('количество'),
         validators=[
             MinValueValidator(
-                limit_value=1,
-                message=_('Минимальное количество — 1.')
+                limit_value=MIN_AMOUNT_SIZE,
+                message=_(f'Минимальное количество — {MIN_AMOUNT_SIZE}.')
+            ),
+            MaxValueValidator(
+                limit_value=MAX_AMOUNT_SIZE,
+                message=_(f'Максимальное количество — {MAX_AMOUNT_SIZE}.')
             )
         ]
     )
@@ -123,6 +136,7 @@ class IngredientInRecipe(models.Model):
     class Meta:
         verbose_name = _('ингредиент в рецепте')
         verbose_name_plural = _('ингредиенты в рецепте')
+        ordering = ['recipe']
         constraints = [
             models.UniqueConstraint(
                 fields=['ingredient', 'recipe'],
@@ -135,7 +149,7 @@ class IngredientInRecipe(models.Model):
 
 
 class Favorite(models.Model):
-    '''Model for adding to favorite.'''
+    """Model for adding to favorite."""
     user = models.ForeignKey(
         User,
         related_name='favorites',
@@ -167,7 +181,7 @@ class Favorite(models.Model):
 
 
 class ShoppingCart(models.Model):
-    '''Model for adding to cart.'''
+    """Model for adding to cart."""
     user = models.ForeignKey(
         User,
         related_name='cart',
