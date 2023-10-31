@@ -59,7 +59,7 @@ class Subscribe(models.Model):
     class Meta:
         verbose_name = _('Подписка')
         verbose_name_plural = _('Подписки')
-        ordering = ('author__id')
+        ordering = ['author__id']
         constraints = [
             models.UniqueConstraint(
                 fields=['author', 'user'],
