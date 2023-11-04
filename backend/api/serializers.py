@@ -183,6 +183,7 @@ class CUDRecipeSerializer(serializers.ModelSerializer):
             "name",
             "text",
             "author",
+            "cooking_time"
         )
 
     def create_ingredients(self, ingredients, recipe):
