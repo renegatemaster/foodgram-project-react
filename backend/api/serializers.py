@@ -187,15 +187,13 @@ class CUDRecipeSerializer(serializers.ModelSerializer):
         )
 
     def create_ingredients(self, ingredients, recipe):
-        objs = []
-        for id, amount in ingredients:
-            ingredient = get_object_or_404(Ingredient, pk=id)
-            objs.append(
-                IngredientInRecipe(
-                    ingredient=ingredient, recipe=recipe, amount=amount
-                )
-            )
-        IngredientInRecipe.objects.bulk_create(objs)
+        IngredientInRecipe.objects.bulk_create(
+            [IngredientInRecipe(
+                ingredient=get_object_or_404(Ingredient, id=ingredient['id']),
+                recipe=recipe,
+                amount=ingredient['amount']
+            ) for ingredient in ingredients]
+        )
 
     def create(self, validated_data):
         ingredients = validated_data.pop("ingredients")
