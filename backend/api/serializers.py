@@ -188,7 +188,7 @@ class CUDRecipeSerializer(serializers.ModelSerializer):
 
     def create_ingredients(self, ingredients, recipe):
         objs = []
-        for id, amount in ingredients.values():
+        for id, amount in ingredients:
             ingredient = get_object_or_404(Ingredient, pk=id)
             objs.append(
                 IngredientInRecipe(
