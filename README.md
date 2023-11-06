@@ -1,9 +1,20 @@
-# Foodgram 
-_Cайт для ваших рецептов_ 
+# Foodgram
+_Cайт для ваших рецептов_
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)![DjangoREST](https://img.shields.io/badge/DJANGO-REST-ff1709?style=for-the-badge&logo=django&logoColor=white&color=ff1709&labelColor=gray)![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)![Gunicorn](https://img.shields.io/badge/gunicorn-%298729.svg?style=for-the-badge&logo=gunicorn&logoColor=white)![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
-### Как с этим работать? 
+### Информация для проверки
+
+Адрес сайта:
+https://food-gram.sytes.net/
+
+Для входа в админку:
+```
+email: admin@admin.com
+password: admin
+```
+
+### Как с этим работать?
 
 
 Клонируем репозиторий и переходим в него в командной строке:
@@ -16,7 +27,7 @@ cd foodgram-project-react
 Cоздаём и активируем виртуальное окружение, устанавливаем зависимости:
 
 ```bash
-python3.9 -m venv venv && \ 
+python3.9 -m venv venv && \
     source venv/bin/activate && \
     python -m pip install --upgrade pip && \
     pip install -r backend/requirements.txt
